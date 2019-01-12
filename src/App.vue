@@ -1,17 +1,44 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <FileManager v-if="fileOpened"
+    :file="file"
+    :password="password">
+    </FileManager>
+    <div v-else>
+      <input type="file" name="File" id="file"
+      @change="processFile($event)">
+      <input v-model="password" type="password" name="Password" id="password">
+      <button @click="openFile">Open File</button>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import FileManager from "@/components/FileManager";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    FileManager
+  },
+  data() {
+    return {
+      file: null,
+      password: null,
+      fileOpened: false
+    };
+  },
+  methods: {
+    processFile(event) {
+      this.file = event.target.files[0];
+    },
+    openFile: function() {
+      if (this.file && this.password) {
+        this.fileOpened = true;
+      } else {
+        alert("File and Password are needed");
+      }
+    }
   }
 };
 </script>
